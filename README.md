@@ -1,69 +1,26 @@
-# React + TypeScript + Vite
+# BillBoard Japan 2024 Top 10 - 資料流練習專案
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 專案簡介
 
-Currently, two official plugins are available:
+這是一個使用 **React + TypeScript** 製作的日本 Billboard Top 10 歌曲排行榜應用程式。  
+用戶可以查看排行榜、修改歌曲評分、點擊星星或輸入數字更新分數，並新增歌曲到排行榜。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 資料流學習心得
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 父組件管理核心 state
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `App.tsx` 統一管理所有歌曲資料 (`songs`)
+- 子組件不直接修改 state，只透過父組件傳來的函數更新
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 單向資料流 (Unidirectional Data Flow)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- 父組件把資料傳給子組件 (`SongItem` / `AddSong`)
+- 子組件透過 props 回報操作（點星星、輸入分數、新增歌曲）
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 事件回調修改 state
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- 使用者操作會呼叫父組件的 `setSongs`，建立新陣列更新 state
+- 保持 React 單向資料流的原則
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
